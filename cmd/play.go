@@ -17,17 +17,20 @@ var playCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		keyStrokes := make(chan string)
-		// var exampleContext = "this is an example"
 		go getKeys(keyStrokes)
 
 		for key := range keyStrokes {
-			fmt.Printf("%v\n", key)
+			handleKeyStroke(key)
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(playCmd)
+}
+
+func handleKeyStroke(key string) {
+	fmt.Printf("%v\n", key)
 }
 
 func getKeys(c chan<- string) {
