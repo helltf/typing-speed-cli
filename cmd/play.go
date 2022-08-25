@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/eiannone/keyboard"
+	"github.com/helltf/typing-speed-cli/internal/game"
 	"github.com/spf13/cobra"
 )
 
@@ -16,21 +17,20 @@ var playCmd = &cobra.Command{
 	Short: "Play a game to test you typing speed",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		context := "This is an example context"
+		runningGame := game.NewGame(context)
+
 		keyStrokes := make(chan string)
 		go getKeys(keyStrokes)
 
 		for key := range keyStrokes {
-			handleKeyStroke(key)
+			runningGame.Input(key)
 		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(playCmd)
-}
-
-func handleKeyStroke(key string) {
-	fmt.Printf("%v\n", key)
 }
 
 func getKeys(c chan<- string) {
