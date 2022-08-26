@@ -16,24 +16,28 @@ var playCmd = &cobra.Command{
 	Short: "Play a game to test you typing speed",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		context := "context"
-		runningGame := game.NewGame(context)
-
-		keyStrokes := make(chan rune)
-		go getKeys(keyStrokes)
-
-		for key := range keyStrokes {
-			isFinished := runningGame.Input(key)
-
-			if isFinished {
-				os.Exit(0)
-			}
-		}
+		start()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(playCmd)
+}
+
+func start() {
+	context := "abc"
+	runningGame := game.NewGame(context)
+
+	keyStrokes := make(chan rune)
+	go getKeys(keyStrokes)
+
+	for key := range keyStrokes {
+		isFinished := runningGame.Input(key)
+		if isFinished {
+			runningGame.Stop()
+			os.Exit(0)
+		}
+	}
 }
 
 func getKeys(c chan<- rune) {
