@@ -35,6 +35,8 @@ func start() {
 		isFinished := runningGame.Input(key)
 		if isFinished {
 			runningGame.Stop()
+			keyboard.Close()
+			close(keyStrokes)
 			os.Exit(0)
 		}
 	}
