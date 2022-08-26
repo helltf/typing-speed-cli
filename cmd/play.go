@@ -4,23 +4,30 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
+	"os"
 
 	"github.com/eiannone/keyboard"
+	"github.com/helltf/typing-speed-cli/internal/game"
 	"github.com/spf13/cobra"
 )
 
-// playCmd represents the play command
 var playCmd = &cobra.Command{
 	Use:   "play",
 	Short: "Play a game to test you typing speed",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		keyStrokes := make(chan string)
+		context := "context"
+		runningGame := game.NewGame(context)
+
+		keyStrokes := make(chan rune)
 		go getKeys(keyStrokes)
 
 		for key := range keyStrokes {
-			handleKeyStroke(key)
+			isFinished := runningGame.Input(key)
+
+			if isFinished {
+				os.Exit(0)
+			}
 		}
 	},
 }
@@ -29,11 +36,7 @@ func init() {
 	rootCmd.AddCommand(playCmd)
 }
 
-func handleKeyStroke(key string) {
-	fmt.Printf("%v\n", key)
-}
-
-func getKeys(c chan<- string) {
+func getKeys(c chan<- rune) {
 	if err := keyboard.Open(); err != nil {
 		panic(err)
 	}
@@ -52,6 +55,6 @@ func getKeys(c chan<- string) {
 			break
 		}
 
-		c <- string(char)
+		c <- char
 	}
 }
