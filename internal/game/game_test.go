@@ -1,7 +1,6 @@
 package game
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,7 +8,7 @@ import (
 
 func TestNewGame(t *testing.T) {
 	context := "exampleContext"
-	contextSlice := strings.Split(context, "")
+	contextSlice := []rune(context)
 	game := NewGame(context)
 	defaulIndex := 0
 
@@ -25,7 +24,7 @@ func TestInputReturnNoEnd(t *testing.T) {
 	context := "exampleContext"
 	game := NewGame(context)
 
-	end := game.Input("a")
+	end := game.Input([]rune("a")[0])
 
 	assert.Equal(end, false, "End should not have ended on input")
 }
@@ -35,7 +34,7 @@ func TestInputIndexIsLastPositionReturEnd(t *testing.T) {
 	context := "a"
 	game := NewGame(context)
 
-	end := game.Input("a")
+	end := game.Input([]rune("a")[0])
 
 	assert.Equal(end, true, "End should have ended on that input")
 }
@@ -44,9 +43,9 @@ func TestIsCorrectLetterDoesNotMatchReturnFalse(t *testing.T) {
 	assert := assert.New(t)
 	context := "context"
 	game := NewGame(context)
-	input := "f"
+	input := []rune("f")
 
-	isCorrect := game.IsCorrectLetter(input)
+	isCorrect := game.IsCorrectLetter(input[0])
 	assert.False(isCorrect, "Letter should not be correct")
 }
 
@@ -54,19 +53,19 @@ func TestIsCorrectLetterDoesMatchReturnTrue(t *testing.T) {
 	assert := assert.New(t)
 	context := "context"
 	game := NewGame(context)
-	input := "c"
+	input := []rune("c")
 
-	isCorrect := game.IsCorrectLetter(input)
-	assert.Truef(isCorrect, "Letter should be %v but received %v", "c", input)
+	isCorrect := game.IsCorrectLetter(input[0])
+	assert.Truef(isCorrect, "Letter should be %v but received %v", "102", input)
 }
 
-func TestIsCorrectLetterDifferentIndeDoesNotMatchReturnFalse(t *testing.T) {
+func TestIsCorrectLetterDifferentIndexDoesNotMatchReturnFalse(t *testing.T) {
 	assert := assert.New(t)
 	context := "context"
 	game := NewGame(context)
 	game.currentIndex = 1
-	input := "f"
+	input := []rune("f")
 
-	isCorrect := game.IsCorrectLetter(input)
+	isCorrect := game.IsCorrectLetter(input[0])
 	assert.False(isCorrect, "Letter should not be correct")
 }
