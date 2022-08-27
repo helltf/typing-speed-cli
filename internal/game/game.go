@@ -1,6 +1,7 @@
 package game
 
 import (
+	"github.com/TwiN/go-color"
 	"github.com/helltf/typing-speed-cli/internal/writer"
 )
 
@@ -50,7 +51,8 @@ func (game *Game) setIndex(index int) {
 }
 
 func (g *Game) colorizeContext() string {
-	begin := "\033[32m" + string(g.contextSlice[:g.currentIndex]) + "\033[0m"
+
+	begin := color.Green + string(g.contextSlice[:g.currentIndex]) + color.Reset
 	end := string(g.contextSlice[g.currentIndex:len(g.contextSlice)])
 
 	return begin + end

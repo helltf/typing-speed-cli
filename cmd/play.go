@@ -4,8 +4,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"os"
-
 	"github.com/eiannone/keyboard"
 	"github.com/helltf/typing-speed-cli/internal/game"
 	"github.com/spf13/cobra"
@@ -28,19 +26,10 @@ func start() {
 	context := "abc"
 	runningGame := game.NewGame(context)
 
-	keyStrokes := make(chan rune)
-	go getKeys(keyStrokes)
-
-	for key := range keyStrokes {
-		isFinished := runningGame.Input(key)
-		if isFinished {
-			runningGame.Stop()
-			os.Exit(0)
-		}
-	}
+	startKeyboard(runningGame)
 }
 
-func getKeys(c chan<- rune) {
+func startKeyboard(game *game.Game) {
 	if err := keyboard.Open(); err != nil {
 		panic(err)
 	}
@@ -55,10 +44,14 @@ func getKeys(c chan<- rune) {
 		}
 
 		if key == keyboard.KeyEsc {
-			close(c)
 			break
 		}
 
-		c <- char
+		isFinished := game.Input(char)
+
+		if isFinished {
+			game.Stop()
+			break
+		}
 	}
 }
