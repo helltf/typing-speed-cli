@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"github.com/eiannone/keyboard"
+	"github.com/helltf/typing-speed-cli/internal/context"
 	"github.com/helltf/typing-speed-cli/internal/game"
 	"github.com/spf13/cobra"
 )
@@ -23,8 +24,8 @@ func init() {
 }
 
 func start() {
-	context := "abc"
-	runningGame := game.NewGame(context)
+	gameContext := context.GetContext()
+	runningGame := game.NewGame(gameContext)
 
 	startKeyboard(runningGame)
 }
