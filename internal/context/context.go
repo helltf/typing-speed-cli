@@ -8,21 +8,16 @@ import (
 )
 
 type Context struct {
-	id string `json:"id"`
-	context string `json:para`
-}
-
-type ContextNodes struct {
-	data []Context `json:data`
+	Id json.Number `json:"id"`
+	Context string `json:"para"`
 }
 
 func GetContext() string {
 	context := readContext()
-	fmt.Println(context)
-	return context.data[0].context
+	return context[0].Context
 }
 
-func readContext() ContextNodes {
+func readContext() []Context {
 	jsonFile, err := os.Open("./data/context.json")
 
 	if err != nil {
@@ -32,7 +27,7 @@ func readContext() ContextNodes {
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-    var result ContextNodes
+    var result []Context
 
     err = json.Unmarshal([]byte(byteValue), &result)
 
