@@ -1,6 +1,8 @@
 package game
 
 import (
+	"strings"
+
 	"github.com/TwiN/go-color"
 	"github.com/helltf/typing-speed-cli/internal/writer"
 )
@@ -14,13 +16,15 @@ type Game struct {
 
 func NewGame(context string) *Game {
 	writer := writer.NewWriter()
-	writer.Print(context)
-
-	return &Game{
+	game :=&Game{
 		context:      context,
 		currentIndex: 0,
 		contextSlice: []rune(context),
-		writer:       writer}
+		writer:       writer} 
+		
+	writer.Print(game.getOutputContext())
+
+	return game
 }
 
 func (game *Game) Input(input rune) bool {
@@ -32,7 +36,7 @@ func (game *Game) Input(input rune) bool {
 
 	game.setIndex(game.currentIndex + 1)
 
-	game.writer.Update(game.colorizeContext())
+	game.writer.Update(game.getOutputContext())
 
 	return game.currentIndex == len(game.context)
 }
@@ -60,4 +64,8 @@ func (g *Game) colorizeContext() string {
 
 func (g *Game) Stop() {
 	g.writer.Stop()
+}
+
+func(g *Game) getOutputContext() string{
+	return strings.ReplaceAll(g.colorizeContext()," ","_")
 }
