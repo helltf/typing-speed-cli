@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/TwiN/go-color"
+	"github.com/helltf/typing-speed-cli/internal/config"
 	"github.com/helltf/typing-speed-cli/internal/writer"
 )
 
@@ -67,5 +68,5 @@ func (g *Game) Stop() {
 }
 
 func(g *Game) getOutputContext() string{
-	return strings.ReplaceAll(g.colorizeContext()," ","_")
+	return strings.ReplaceAll(g.colorizeContext()," ",config.Conf.Space)
 }
