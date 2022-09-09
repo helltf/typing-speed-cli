@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+var Conf *Config
 type Config struct {
 	Space string`json:"space"`
 }
@@ -32,11 +33,9 @@ func readConfig() Config {
 	return result
 }
 
-func New() *Config{
-	config := readConfig()
-	return &config
+func Init(){
+	conf := readConfig()
+	Conf = &conf
 }
 
-func (c *Config) getSpace() string{
-	return c.Space
-}
+
