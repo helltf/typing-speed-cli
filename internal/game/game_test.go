@@ -3,10 +3,18 @@ package game
 import (
 	"testing"
 
+	"github.com/helltf/typing-speed-cli/internal/config"
 	"github.com/stretchr/testify/assert"
 )
 
+func loadConfig(){
+	mockedConfig := &config.Config{
+		Space:       "-"}
+	config.InitWithConf(mockedConfig)
+}
+
 func TestNewGame(t *testing.T) {
+	loadConfig()
 	context := "exampleContext"
 	contextSlice := []rune(context)
 	game := NewGame(context)
@@ -20,6 +28,7 @@ func TestNewGame(t *testing.T) {
 }
 
 func TestInputReturnNoEnd(t *testing.T) {
+	loadConfig()
 	assert := assert.New(t)
 	context := "exampleContext"
 	game := NewGame(context)
@@ -30,6 +39,7 @@ func TestInputReturnNoEnd(t *testing.T) {
 }
 
 func TestInputIndexIsLastPositionReturEnd(t *testing.T) {
+	loadConfig()
 	assert := assert.New(t)
 	context := "a"
 	game := NewGame(context)
@@ -40,6 +50,7 @@ func TestInputIndexIsLastPositionReturEnd(t *testing.T) {
 }
 
 func TestIsCorrectLetterDoesNotMatchReturnFalse(t *testing.T) {
+	loadConfig()
 	assert := assert.New(t)
 	context := "context"
 	game := NewGame(context)
@@ -50,6 +61,7 @@ func TestIsCorrectLetterDoesNotMatchReturnFalse(t *testing.T) {
 }
 
 func TestIsCorrectLetterDoesMatchReturnTrue(t *testing.T) {
+	loadConfig()
 	assert := assert.New(t)
 	context := "context"
 	game := NewGame(context)
@@ -60,6 +72,7 @@ func TestIsCorrectLetterDoesMatchReturnTrue(t *testing.T) {
 }
 
 func TestIsCorrectLetterDifferentIndexDoesNotMatchReturnFalse(t *testing.T) {
+	loadConfig()
 	assert := assert.New(t)
 	context := "context"
 	game := NewGame(context)
