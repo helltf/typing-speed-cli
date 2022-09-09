@@ -17,7 +17,7 @@ type Game struct {
 
 func NewGame(context string) *Game {
 	writer := writer.NewWriter()
-	game :=&Game{
+	game := &Game{
 		context:      context,
 		currentIndex: 0,
 		contextSlice: []rune(context),

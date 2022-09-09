@@ -8,7 +8,9 @@ import (
 )
 
 func loadConfig(){
-	config.Init()
+	mockedConfig := &config.Config{
+		Space:       "-"}
+	config.InitWithConf(mockedConfig)
 }
 
 func TestNewGame(t *testing.T) {

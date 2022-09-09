@@ -38,4 +38,8 @@ func Init(){
 	Conf = &conf
 }
 
+func InitWithConf(config *Config){
+	Conf = config
+}
+
 
