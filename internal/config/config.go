@@ -40,7 +40,7 @@ func writeConfig() error {
 		return err
 	}
 
-	return  ioutil.WriteFile("test.json", file, 0644)
+	return  ioutil.WriteFile("config.json", file, 0644)
 }
 
 func Init(){
