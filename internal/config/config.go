@@ -33,6 +33,16 @@ func readConfig() Config {
 	return result
 }
 
+func writeConfig() error {
+	file, err := json.MarshalIndent(Conf, "", " ")
+ 
+	if err != nil {
+		return err
+	}
+
+	return  ioutil.WriteFile("config.json", file, 0644)
+}
+
 func Init(){
 	conf := readConfig()
 	Conf = &conf
@@ -42,4 +52,9 @@ func InitWithConf(config *Config){
 	Conf = config
 }
 
+func SetSpace(char string) error {
+	Conf.Space = char
+
+	return writeConfig() 
+}
 
