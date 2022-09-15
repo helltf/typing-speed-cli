@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/helltf/typing-speed-cli/internal/config"
 	"github.com/spf13/cobra"
@@ -22,6 +23,10 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		space, _ := cmd.Flags().GetString("space")
+
+		if strings.ToLower(space) == "default"{
+			space = " a"
+		}
 
 		err := setSpaceChar(space)
 
