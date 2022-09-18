@@ -1,49 +1,79 @@
 package game
 
 import (
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/TwiN/go-color"
 	"github.com/helltf/typing-speed-cli/internal/config"
 	"github.com/helltf/typing-speed-cli/internal/writer"
 )
 
+const updateCycle = 250
+
+var ticker = time.NewTicker(updateCycle * time.Millisecond)
+var quit = make(chan struct{})
+
 type Game struct {
 	context      string
 	currentIndex int
 	contextSlice []rune
-	writer       *writer.Writer
+	time         int
+	Cps          float64
 }
 
 func NewGame(context string) *Game {
-	writer := writer.NewWriter()
 	game := &Game{
 		context:      context,
 		currentIndex: 0,
-		contextSlice: []rune(context),
-		writer:       writer} 
-		
-	writer.Print(game.getOutputContext())
+		contextSlice: []rune(context)}
 
+	writer.Print(game.getOutputContext())
+	go game.startTimer()
 	return game
 }
 
 func (game *Game) Input(input rune) bool {
-	isCorrect := game.IsCorrectLetter(input)
-
-	if !isCorrect {
+	if !game.IsCorrectLetter(input) {
 		return false
 	}
 
-	game.setIndex(game.currentIndex + 1)
+	game.incrementIndex()
 
-	game.writer.Update(game.getOutputContext())
+	writer.Update(game.getOutputContext())
 
 	return game.currentIndex == len(game.context)
 }
 
+func (g *Game) incrementIndex() {
+	g.setIndex(g.currentIndex + 1)
+
+}
+
+func (g *Game) startTimer() {
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				g.updateTime()
+			case <-quit:
+				ticker.Stop()
+				return
+			}
+		}
+	}()
+}
+
+func (g *Game) updateTime() {
+	g.time += updateCycle
+
+	g.Cps = float64(g.currentIndex) / (float64(g.time) / float64(1000))
+}
+
 func (game Game) IsCorrectLetter(letter rune) bool {
 	currentLetter := game.contextSlice[game.currentIndex]
+
 	if letter == currentLetter {
 		return true
 	}
@@ -64,9 +94,10 @@ func (g *Game) colorizeContext() string {
 }
 
 func (g *Game) Stop() {
-	g.writer.Stop()
+	close(quit)
+	writer.Stop()
 }
 
-func(g *Game) getOutputContext() string{
-	return strings.ReplaceAll(g.colorizeContext()," ",config.Conf.Space)
+func (g *Game) getOutputContext() string {
+	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) + "\n\n" + strconv.Itoa(int(g.Cps)) + " Characters per second"
 }
