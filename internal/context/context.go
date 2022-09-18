@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"time"
 )
 
 type Context struct {
@@ -14,6 +15,8 @@ type Context struct {
 }
 
 func GetContext() string {
+	rand.Seed(time.Now().UnixNano())
+
 	context := readContext()
 	return context[rand.Intn(len(context))-1].Context
 }
@@ -35,5 +38,6 @@ func readContext() []Context {
 	if err != nil {
 		panic(err)
 	}
+
 	return result
 }
