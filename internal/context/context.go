@@ -4,17 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 )
 
 type Context struct {
-	Id json.Number `json:"id"`
-	Context string `json:"para"`
+	Id      json.Number `json:"id"`
+	Context string      `json:"para"`
 }
 
 func GetContext() string {
 	context := readContext()
-	return context[0].Context
+	return context[rand.Intn(len(context))-1].Context
 }
 
 func readContext() []Context {
@@ -22,14 +23,14 @@ func readContext() []Context {
 
 	if err != nil {
 		fmt.Println(err)
-	} 
+	}
 
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-    var result []Context
+	var result []Context
 
-    err = json.Unmarshal([]byte(byteValue), &result)
+	err = json.Unmarshal([]byte(byteValue), &result)
 
 	if err != nil {
 		panic(err)
