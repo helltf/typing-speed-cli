@@ -6,29 +6,22 @@ import (
 	"github.com/gosuri/uilive"
 )
 
-type Writer struct {
-	writer *uilive.Writer
+var writer = uilive.New()
+
+func Print(context string) {
+	writer.Start()
+	clear()
+	fmt.Fprintf(writer, context+"\n")
 }
 
-func NewWriter() *Writer {
-	return &Writer{
-		writer: uilive.New()}
+func Stop() {
+	writer.Stop()
 }
 
-func (w *Writer) Print(context string) {
-	w.writer.Start()
-	w.clear()
-	fmt.Fprintf(w.writer, context+"\n")
+func Update(context string) {
+	fmt.Fprintln(writer, context)
 }
 
-func (w *Writer) Stop() {
-	w.writer.Stop()
-}
-
-func (w *Writer) Update(context string) {
-	fmt.Fprintln(w.writer, context)
-}
-
-func (w *Writer) clear() {
+func clear() {
 	fmt.Print("\033[H\033[2J")
 }
