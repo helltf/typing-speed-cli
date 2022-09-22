@@ -99,5 +99,5 @@ func (g *Game) Stop() {
 }
 
 func (g *Game) getOutputContext() string {
-	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) + "\n\n" + strconv.Itoa(int(g.Cps)) + " Characters per second"
+	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) + "\n\n" + strconv.Itoa(int(g.Cps)) + " Characters per second" + "\n" + len() + "words"
 }
