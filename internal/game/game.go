@@ -21,13 +21,15 @@ type Game struct {
 	contextSlice []rune
 	time         int
 	Cps          float64
+	words        int
 }
 
 func NewGame(context string) *Game {
 	game := &Game{
 		context:      context,
 		currentIndex: 0,
-		contextSlice: []rune(context)}
+		contextSlice: []rune(context),
+		words:        0}
 
 	writer.Print(game.getOutputContext())
 	go game.startTimer()
@@ -40,6 +42,10 @@ func (game *Game) Input(input rune) bool {
 	}
 
 	game.incrementIndex()
+
+	if input == 0 {
+		game.updateWordCount()
+	}
 
 	writer.Update(game.getOutputContext())
 
@@ -98,6 +104,18 @@ func (g *Game) Stop() {
 	writer.Stop()
 }
 
+func (g *Game) updateWordCount() {
+	g.words += 1
+}
+
 func (g *Game) getOutputContext() string {
-	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) + "\n\n" + strconv.Itoa(int(g.Cps)) + " Characters per second" + "\n" + strconv.Itoa(len(strings.Split(g.context, " "))) + " words"
+	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) +
+		"\n\n" +
+		strconv.Itoa(int(g.Cps)) +
+		" Characters per second" +
+		"\n" +
+		strconv.Itoa(g.words) +
+		"/" +
+		strconv.Itoa(len(strings.Split(g.context, " "))) +
+		" words"
 }
