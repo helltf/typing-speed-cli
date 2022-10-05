@@ -8,8 +8,10 @@ import (
 )
 
 var Conf *Config
+
 type Config struct {
-	Space string`json:"space"`
+	Space string `json:"space"`
+	Unit  string `json:"unit"`
 }
 
 func readConfig() Config {
@@ -17,14 +19,14 @@ func readConfig() Config {
 
 	if err != nil {
 		fmt.Println(err)
-	} 
+	}
 
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-    var result Config
+	var result Config
 
-    err = json.Unmarshal([]byte(byteValue), &result)
+	err = json.Unmarshal([]byte(byteValue), &result)
 
 	if err != nil {
 		panic(err)
@@ -35,26 +37,31 @@ func readConfig() Config {
 
 func writeConfig() error {
 	file, err := json.MarshalIndent(Conf, "", " ")
- 
+
 	if err != nil {
 		return err
 	}
 
-	return  ioutil.WriteFile("config.json", file, 0644)
+	return ioutil.WriteFile("config.json", file, 0644)
 }
 
-func Init(){
+func Init() {
 	conf := readConfig()
 	Conf = &conf
 }
 
-func InitWithConf(config *Config){
+func InitWithConf(config *Config) {
 	Conf = config
 }
 
 func SetSpace(char string) error {
 	Conf.Space = char
 
-	return writeConfig() 
+	return writeConfig()
 }
 
+func SetUnit(unit string) error {
+	Conf.Unit = unit
+
+	return writeConfig()
+}
