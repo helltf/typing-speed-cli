@@ -14,6 +14,10 @@ type Config struct {
 	Unit  string `json:"unit"`
 }
 
+func UpdateConfig(conf *Config) {
+	Conf = conf
+}
+
 func readConfig() *Config {
 	jsonFile, err := os.Open("./config.json")
 
