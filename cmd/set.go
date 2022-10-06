@@ -35,7 +35,7 @@ to quickly create a Cobra application.`,
 		unit, _ := cmd.Flags().GetString(unitConfig)
 
 		if space != "" {
-			err :=	updateSpaceChar(space)
+			err := updateSpaceChar(space)
 
 			if err != nil {
 				panic(err)
