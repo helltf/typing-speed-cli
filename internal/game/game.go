@@ -29,7 +29,7 @@ func NewGame(context string) *Game {
 		context:      context,
 		currentIndex: 0,
 		contextSlice: []rune(context),
-		words:        0}
+		words:        1}
 
 	writer.Print(game.getOutputContext())
 	go game.startTimer()
