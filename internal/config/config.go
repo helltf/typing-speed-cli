@@ -7,14 +7,14 @@ import (
 	"os"
 )
 
-var Conf *Config
+var Conf *Config = readConfig()
 
 type Config struct {
 	Space string `json:"space"`
 	Unit  string `json:"unit"`
 }
 
-func readConfig() Config {
+func readConfig() *Config {
 	jsonFile, err := os.Open("./config.json")
 
 	if err != nil {
@@ -32,7 +32,7 @@ func readConfig() Config {
 		panic(err)
 	}
 
-	return result
+	return &result
 }
 
 func writeConfig() error {
@@ -43,15 +43,6 @@ func writeConfig() error {
 	}
 
 	return ioutil.WriteFile("config.json", file, 0644)
-}
-
-func Init() {
-	conf := readConfig()
-	Conf = &conf
-}
-
-func InitWithConf(config *Config) {
-	Conf = config
 }
 
 func SetSpace(char string) error {
