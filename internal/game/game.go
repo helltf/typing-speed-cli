@@ -7,6 +7,7 @@ import (
 
 	"github.com/TwiN/go-color"
 	"github.com/helltf/typing-speed-cli/internal/config"
+	"github.com/helltf/typing-speed-cli/internal/enum/unit"
 	"github.com/helltf/typing-speed-cli/internal/writer"
 )
 
@@ -29,7 +30,7 @@ func NewGame(context string) *Game {
 		context:      context,
 		currentIndex: 0,
 		contextSlice: []rune(context),
-		words:        0}
+		words:        1}
 
 	writer.Print(game.getOutputContext())
 	go game.startTimer()
@@ -108,14 +109,45 @@ func (g *Game) updateWordCount() {
 	g.words += 1
 }
 
+func (g *Game) getCps() int {
+	return int(g.Cps)
+}
+
+func (g *Game) getWpm() int {
+	return g.getCpm() / 5
+}
+
+func (g *Game) getCpm() int {
+	return g.getCps() * 60
+}
+
+func (g *Game) getCurrentWords() string {
+	return strconv.Itoa(g.words)
+}
+
+func (g *Game) getMaxWords() string {
+	return strconv.Itoa(len(strings.Split(g.context, " ")))
+}
+
+func (g *Game) getCurrentSpeed() string {
+	if config.Conf.Unit == unit.Cps {
+		return strconv.Itoa(g.getCps()) + " Characters per second"
+	}
+
+	if config.Conf.Unit == unit.Cpm {
+		return strconv.Itoa(g.getCpm()) + " Characters per minute"
+	}
+
+	return strconv.Itoa(g.getWpm()) + " Words per minute"
+}
+
 func (g *Game) getOutputContext() string {
 	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) +
 		"\n\n" +
-		strconv.Itoa(int(g.Cps)) +
-		" Characters per second" +
+		g.getCurrentSpeed() +
 		"\n" +
-		strconv.Itoa(g.words) +
+		g.getCurrentWords() +
 		"/" +
-		strconv.Itoa(len(strings.Split(g.context, " "))) +
+		g.getMaxWords() +
 		" words"
 }

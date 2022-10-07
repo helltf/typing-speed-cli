@@ -7,54 +7,56 @@ import (
 	"os"
 )
 
-var Conf *Config
+var Conf *Config = readConfig()
+
 type Config struct {
-	Space string`json:"space"`
+	Space string `json:"space"`
+	Unit  string `json:"unit"`
 }
 
-func readConfig() Config {
+func UpdateConfig(conf *Config) {
+	Conf = conf
+}
+
+func readConfig() *Config {
 	jsonFile, err := os.Open("./config.json")
 
 	if err != nil {
 		fmt.Println(err)
-	} 
+	}
 
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-    var result Config
+	var result Config
 
-    err = json.Unmarshal([]byte(byteValue), &result)
+	err = json.Unmarshal([]byte(byteValue), &result)
 
 	if err != nil {
 		panic(err)
 	}
 
-	return result
+	return &result
 }
 
 func writeConfig() error {
 	file, err := json.MarshalIndent(Conf, "", " ")
- 
+
 	if err != nil {
 		return err
 	}
 
-	return  ioutil.WriteFile("config.json", file, 0644)
-}
-
-func Init(){
-	conf := readConfig()
-	Conf = &conf
-}
-
-func InitWithConf(config *Config){
-	Conf = config
+	return ioutil.WriteFile("config.json", file, 0644)
 }
 
 func SetSpace(char string) error {
 	Conf.Space = char
 
-	return writeConfig() 
+	return writeConfig()
 }
 
+func SetUnit(unit string) error {
+	Conf.Unit = unit
+
+	return writeConfig()
+}
