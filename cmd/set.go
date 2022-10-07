@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/helltf/typing-speed-cli/internal/config"
+	"github.com/helltf/typing-speed-cli/internal/enum/unit"
 	"github.com/helltf/typing-speed-cli/internal/util"
 	"github.com/spf13/cobra"
 )
@@ -18,7 +19,7 @@ const (
 	unitConfig  = "unit"
 )
 
-var valid_units = []string{"cps", "wpm"}
+var valid_units = []string{unit.Cps, unit.Wpm}
 
 // setCmd represents the set command
 var setCmd = &cobra.Command{
@@ -56,7 +57,7 @@ to quickly create a Cobra application.`,
 
 func updateSpaceChar(space string) error {
 	if strings.ToLower(space) == "default" {
-		space = " a"
+		space = " "
 	}
 
 	err := setSpaceChar(space)

@@ -7,6 +7,7 @@ import (
 
 	"github.com/TwiN/go-color"
 	"github.com/helltf/typing-speed-cli/internal/config"
+	"github.com/helltf/typing-speed-cli/internal/enum/unit"
 	"github.com/helltf/typing-speed-cli/internal/writer"
 )
 
@@ -108,14 +109,33 @@ func (g *Game) updateWordCount() {
 	g.words += 1
 }
 
+func (g *Game) getCps() string {
+	return strconv.Itoa(int(g.Cps))
+}
+
+func (g *Game) getCurrentWords() string {
+	return strconv.Itoa(g.words)
+}
+
+func (g *Game) getMaxWords() string {
+	return strconv.Itoa(len(strings.Split(g.context, " ")))
+}
+
+func (g *Game) getCurrentSpeed() string {
+	if config.Conf.Unit == unit.Cps {
+		return g.getCps() + " Characters per second"
+	}
+
+	return g.getWpm() + " Words per minute"
+}
+
 func (g *Game) getOutputContext() string {
 	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) +
 		"\n\n" +
-		strconv.Itoa(int(g.Cps)) +
-		" Characters per second" +
+		g.getCurrentSpeed() +
 		"\n" +
-		strconv.Itoa(g.words) +
+		g.getCurrentWords() +
 		"/" +
-		strconv.Itoa(len(strings.Split(g.context, " "))) +
+		g.getMaxWords() +
 		" words"
 }
