@@ -19,7 +19,7 @@ const (
 	unitConfig  = "unit"
 )
 
-var valid_units = []string{unit.Cps, unit.Wpm}
+var valid_units = []string{unit.Cps, unit.Wpm, unit.Cpm}
 
 // setCmd represents the set command
 var setCmd = &cobra.Command{

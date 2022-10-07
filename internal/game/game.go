@@ -109,8 +109,16 @@ func (g *Game) updateWordCount() {
 	g.words += 1
 }
 
-func (g *Game) getCps() string {
-	return strconv.Itoa(int(g.Cps))
+func (g *Game) getCps() int {
+	return int(g.Cps)
+}
+
+func (g *Game) getWpm() int {
+	return g.getCpm() / 5
+}
+
+func (g *Game) getCpm() int {
+	return g.getCps() * 60
 }
 
 func (g *Game) getCurrentWords() string {
@@ -123,10 +131,14 @@ func (g *Game) getMaxWords() string {
 
 func (g *Game) getCurrentSpeed() string {
 	if config.Conf.Unit == unit.Cps {
-		return g.getCps() + " Characters per second"
+		return strconv.Itoa(g.getCps()) + " Characters per second"
 	}
 
-	return g.getWpm() + " Words per minute"
+	if config.Conf.Unit == unit.Cpm {
+		return strconv.Itoa(g.getCpm()) + " Characters per minute"
+	}
+
+	return strconv.Itoa(g.getWpm()) + " Words per minute"
 }
 
 func (g *Game) getOutputContext() string {
