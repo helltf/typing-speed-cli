@@ -93,11 +93,15 @@ func (game *Game) setIndex(index int) {
 }
 
 func (g *Game) colorizeContext() string {
+	var cursor = ""
+	if config.Conf.Cursor {
+		cursor = "|"
+	}
 
 	begin := color.Green + string(g.contextSlice[:g.currentIndex]) + color.Reset
 	end := string(g.contextSlice[g.currentIndex:len(g.contextSlice)])
 
-	return begin + "|" + end
+	return begin + cursor + end
 }
 
 func (g *Game) Stop() {
