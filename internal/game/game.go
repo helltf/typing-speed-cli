@@ -97,7 +97,7 @@ func (g *Game) colorizeContext() string {
 	begin := color.Green + string(g.contextSlice[:g.currentIndex]) + color.Reset
 	end := string(g.contextSlice[g.currentIndex:len(g.contextSlice)])
 
-	return begin + end
+	return begin + "|" + end
 }
 
 func (g *Game) Stop() {
