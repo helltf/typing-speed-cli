@@ -15,8 +15,9 @@ import (
 )
 
 const (
-	spaceConfig = "space"
-	unitConfig  = "unit"
+	spaceConfig  = "space"
+	unitConfig   = "unit"
+	cursorConfig = "cursor"
 )
 
 var valid_units = []string{unit.Cps, unit.Wpm, unit.Cpm}
@@ -34,6 +35,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		space, _ := cmd.Flags().GetString(spaceConfig)
 		unit, _ := cmd.Flags().GetString(unitConfig)
+		cursor, _ := cmd.Flags().GetBool(cursorConfig)
 
 		if space != "" {
 			err := updateSpaceChar(space)
@@ -49,6 +51,12 @@ to quickly create a Cobra application.`,
 			if err != nil {
 				panic(err)
 			}
+		}
+
+		err := setCursor(cursor)
+
+		if err != nil {
+			panic(err)
 		}
 
 		fmt.Println("Successfully updated config")
@@ -68,6 +76,7 @@ func init() {
 	configCmd.AddCommand(setCmd)
 	setCmd.PersistentFlags().String(spaceConfig, "", "Set your space character")
 	setCmd.PersistentFlags().String(unitConfig, "", "Set your desired typing unit")
+	setCmd.PersistentFlags().Bool(cursorConfig, config.Conf.Cursor, "enable/disable cursor")
 }
 
 func setSpeedUnit(unit string) error {
@@ -88,4 +97,8 @@ func setSpaceChar(char string) error {
 	err := config.SetSpace(char)
 
 	return err
+}
+
+func setCursor(cursor bool) error {
+	return config.SetCursor(cursor)
 }

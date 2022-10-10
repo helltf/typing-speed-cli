@@ -1,4 +1,5 @@
 {
  "space": "_",
- "unit": "cpm"
+ "unit": "cpm",
+ "cursor": true
 }

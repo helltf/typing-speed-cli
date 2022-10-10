@@ -10,8 +10,9 @@ import (
 var Conf *Config = readConfig()
 
 type Config struct {
-	Space string `json:"space"`
-	Unit  string `json:"unit"`
+	Space  string `json:"space"`
+	Unit   string `json:"unit"`
+	Cursor bool   `json:"cursor"`
 }
 
 func UpdateConfig(conf *Config) {
@@ -57,6 +58,12 @@ func SetSpace(char string) error {
 
 func SetUnit(unit string) error {
 	Conf.Unit = unit
+
+	return writeConfig()
+}
+
+func SetCursor(cursor bool) error {
+	Conf.Cursor = cursor
 
 	return writeConfig()
 }
