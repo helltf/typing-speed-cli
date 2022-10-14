@@ -21,6 +21,7 @@ type Config struct {
 }
 
 var valid_units = []string{unit.Cps, unit.Wpm, unit.Cpm}
+var valid_languages = []string{"en", "de", "es", "fr"}
 
 func UpdateConfig(conf *Config) {
 	Conf = conf
@@ -80,6 +81,10 @@ func SetCursor(cursor bool) error {
 }
 
 func SetLanguage(language string) error {
+	if util.Contains(valid_languages, language) {
+		return errors.New("Invalid language")
+	}
+
 	Conf.Language = language
 
 	return nil
