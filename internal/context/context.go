@@ -7,6 +7,8 @@ import (
 	"math/rand"
 	"os"
 	"time"
+
+	"github.com/helltf/typing-speed-cli/internal/config"
 )
 
 type Context struct {
@@ -22,7 +24,7 @@ func GetContext() string {
 }
 
 func readContext() []Context {
-	jsonFile, err := os.Open("./data/context.json")
+	jsonFile, err := os.Open("./data/context_" + config.Conf.Language + ".json")
 
 	if err != nil {
 		fmt.Println(err)
