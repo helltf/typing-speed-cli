@@ -87,6 +87,7 @@ func init() {
 	configCmd.AddCommand(setCmd)
 	setCmd.PersistentFlags().String(spaceConfig, "", "Set your space character")
 	setCmd.PersistentFlags().String(unitConfig, "", "Set your desired typing unit")
+	setCmd.PersistentFlags().String(langConfig, "", "Set your language you want to practice")
 	setCmd.PersistentFlags().Bool(cursorConfig, config.Conf.Cursor, "enable/disable cursor")
 }
 

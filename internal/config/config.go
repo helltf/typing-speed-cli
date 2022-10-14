@@ -81,7 +81,7 @@ func SetCursor(cursor bool) error {
 }
 
 func SetLanguage(language string) error {
-	if util.Contains(valid_languages, language) {
+	if !util.Contains(valid_languages, language) {
 		return errors.New("Invalid language")
 	}
 
