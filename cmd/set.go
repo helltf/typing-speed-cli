@@ -4,13 +4,10 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/helltf/typing-speed-cli/internal/config"
-	"github.com/helltf/typing-speed-cli/internal/enum/unit"
-	"github.com/helltf/typing-speed-cli/internal/util"
 	"github.com/spf13/cobra"
 )
 
@@ -18,9 +15,8 @@ const (
 	spaceConfig  = "space"
 	unitConfig   = "unit"
 	cursorConfig = "cursor"
+	langConfig   = "lang"
 )
-
-var valid_units = []string{unit.Cps, unit.Wpm, unit.Cpm}
 
 // setCmd represents the set command
 var setCmd = &cobra.Command{
@@ -36,6 +32,7 @@ to quickly create a Cobra application.`,
 		space, _ := cmd.Flags().GetString(spaceConfig)
 		unit, _ := cmd.Flags().GetString(unitConfig)
 		cursor, _ := cmd.Flags().GetBool(cursorConfig)
+		lang, _ := cmd.Flags().GetString(langConfig)
 
 		if space != "" {
 			err := updateSpaceChar(space)
@@ -45,8 +42,16 @@ to quickly create a Cobra application.`,
 			}
 		}
 
+		if lang != "" {
+			err := config.SetLanguage(lang)
+
+			if err != nil {
+				panic(err)
+			}
+		}
+
 		if unit != "" {
-			err := setSpeedUnit(unit)
+			err := config.SetUnit(unit)
 
 			if err != nil {
 				panic(err)
@@ -54,6 +59,12 @@ to quickly create a Cobra application.`,
 		}
 
 		err := setCursor(cursor)
+
+		if err != nil {
+			panic(err)
+		}
+
+		err = config.Write()
 
 		if err != nil {
 			panic(err)
@@ -76,21 +87,8 @@ func init() {
 	configCmd.AddCommand(setCmd)
 	setCmd.PersistentFlags().String(spaceConfig, "", "Set your space character")
 	setCmd.PersistentFlags().String(unitConfig, "", "Set your desired typing unit")
+	setCmd.PersistentFlags().String(langConfig, "", "Set your language you want to practice")
 	setCmd.PersistentFlags().Bool(cursorConfig, config.Conf.Cursor, "enable/disable cursor")
-}
-
-func setSpeedUnit(unit string) error {
-	if !util.Contains(valid_units, unit) {
-		return errors.New("invalid Unit")
-	}
-
-	err := config.SetUnit(unit)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func setSpaceChar(char string) error {

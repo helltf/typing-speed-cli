@@ -11,7 +11,7 @@ To install this tool run following command
 git clone git@github.com:helltf/typing-speed-cli.git
 ```
 
-## Running 
+## Running
 
 To run the typing speed test cd into the folder and run the following command
 
@@ -19,17 +19,25 @@ To run the typing speed test cd into the folder and run the following command
 go run . play
 ```
 
-## Config 
+## Languages
+
+- English
+- German
+- French
+- Spanish
+
+## Config
 
 The config currently contains 3 keys
 
 ```typescript
-space: string
-unit: "cpm" | "cps" | "wpm"
-cursor: boolean
+space: string;
+unit: "cpm" | "cps" | "wpm";
+cursor: boolean;
+language: language;
 ```
 
-Set your configuration via: 
+Set your configuration via:
 
 ```sh
 go run . config set --key=value
