@@ -3,9 +3,8 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
-	"os"
+	"log"
 
 	"github.com/helltf/typing-speed-cli/internal/enum/unit"
 	"github.com/helltf/typing-speed-cli/internal/util"
@@ -28,24 +27,15 @@ func UpdateConfig(conf *Config) {
 }
 
 func readConfig() *Config {
-	jsonFile, err := os.Open("./config.json")
+	path := "./config.json"
+
+	result, err := util.ReadJsonFile[Config](path)
 
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	var result Config
-
-	err = json.Unmarshal([]byte(byteValue), &result)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return &result
+	return result
 }
 
 func writeConfig() error {

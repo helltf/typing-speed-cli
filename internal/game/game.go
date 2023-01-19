@@ -107,6 +107,7 @@ func (g *Game) colorizeContext() string {
 func (g *Game) Stop() {
 	close(quit)
 	writer.Stop()
+	GenerateStats(g)
 }
 
 func (g *Game) updateWordCount() {
