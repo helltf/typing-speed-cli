@@ -29,11 +29,17 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		fmt.Println("Your Stats \n" +
-			"Words in last run: " +
+		fmt.Println("Your stats in you last game\n" +
+			"Words: " +
 			strconv.Itoa(stats.Last.Words) + "\n" +
-			"time spend in last run: " + strconv.Itoa(stats.Last.Time) + "s\n" +
-			"characters per second: " + strconv.Itoa(int(stats.Last.Cps)))
+			"Time spend: " + strconv.Itoa(stats.Last.Time/1000) + "s\n" +
+			"Characters per second: " + strconv.Itoa(int(stats.Last.Cps)))
+
+		fmt.Println("\n Your average stats \n" +
+			"Words: " +
+			strconv.Itoa(stats.Average.Words) + "\n" +
+			"Time spend: " + strconv.Itoa(stats.Average.Time/1000) + "s\n" +
+			"Characters per second: " + strconv.Itoa(int(stats.Average.Cps)))
 	},
 }
 
