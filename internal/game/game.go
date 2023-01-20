@@ -23,6 +23,7 @@ type Game struct {
 	time         int
 	Cps          int
 	words        int
+	correctInput bool
 }
 
 func NewGame(context string) *Game {
@@ -30,7 +31,8 @@ func NewGame(context string) *Game {
 		context:      context,
 		currentIndex: 0,
 		contextSlice: []rune(context),
-		words:        1}
+		words:        1,
+		correctInput: true}
 
 	writer.Print(game.getOutputContext())
 	go game.startTimer()
@@ -38,7 +40,10 @@ func NewGame(context string) *Game {
 }
 
 func (game *Game) Input(input rune) bool {
-	if !game.IsCorrectLetter(input) {
+	game.correctInput = game.IsCorrectLetter(input)
+
+	if !game.correctInput {
+		writer.Update(game.getOutputContext())
 		return false
 	}
 
@@ -93,9 +98,14 @@ func (game *Game) setIndex(index int) {
 }
 
 func (g *Game) colorizeContext() string {
-	var cursor = ""
+	cursor := ""
+
 	if config.Conf.Cursor {
 		cursor = "|"
+	}
+
+	if !g.correctInput {
+		cursor = color.Red + cursor + color.Reset
 	}
 
 	begin := color.Green + string(g.contextSlice[:g.currentIndex]) + color.Reset
