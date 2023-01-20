@@ -4,6 +4,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
+	"strconv"
+
+	"github.com/helltf/typing-speed-cli/internal/game"
 	"github.com/spf13/cobra"
 )
 
@@ -18,6 +22,13 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		stats := game.ReadStats()
+
+		fmt.Println("Your Stats \n" +
+			"Words in last run: " +
+			strconv.Itoa(stats.Last.Words) + "\n" +
+			"time spend in last run: " + strconv.Itoa(stats.Last.Time) + "s\n" +
+			"characters per second: " + strconv.Itoa(int(stats.Last.Cps)))
 	},
 }
 
