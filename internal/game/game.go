@@ -32,23 +32,27 @@ func NewGame(context string) *Game {
 		contextSlice: []rune(context),
 		words:        1}
 
-	writer.Print(game.getOutputContext())
+	writer.Print(game.getOutputContext(true))
 	go game.startTimer()
 	return game
 }
 
 func (game *Game) Input(input rune) bool {
-	if !game.IsCorrectLetter(input) {
+	correctLetter := game.IsCorrectLetter(input)
+
+	if correctLetter {
+		game.incrementIndex()
+
+		if input == 0 {
+			game.updateWordCount()
+		}
+	}
+
+	writer.Update(game.getOutputContext(correctLetter))
+
+	if !correctLetter {
 		return false
 	}
-
-	game.incrementIndex()
-
-	if input == 0 {
-		game.updateWordCount()
-	}
-
-	writer.Update(game.getOutputContext())
 
 	return game.currentIndex == len(game.context)
 }
@@ -92,10 +96,13 @@ func (game *Game) setIndex(index int) {
 	game.currentIndex = index
 }
 
-func (g *Game) colorizeContext() string {
-	var cursor = ""
+func (g *Game) colorizeContext(correct bool) string {
+	cursor := ""
 	if config.Conf.Cursor {
 		cursor = "|"
+	}
+	if !correct {
+		cursor = color.Red + cursor + color.Reset
 	}
 
 	begin := color.Green + string(g.contextSlice[:g.currentIndex]) + color.Reset
@@ -146,8 +153,8 @@ func (g *Game) getCurrentSpeed() string {
 	return strconv.Itoa(g.getWpm()) + " Words per minute"
 }
 
-func (g *Game) getOutputContext() string {
-	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) +
+func (g *Game) getOutputContext(correct bool) string {
+	return strings.ReplaceAll(g.colorizeContext(correct), " ", config.Conf.Space) +
 		"\n\n" +
 		g.getCurrentSpeed() +
 		"\n" +
