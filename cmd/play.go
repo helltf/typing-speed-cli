@@ -4,6 +4,8 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"os"
+
 	"github.com/eiannone/keyboard"
 	"github.com/helltf/typing-speed-cli/internal/context"
 	"github.com/helltf/typing-speed-cli/internal/game"
@@ -52,6 +54,7 @@ func startKeyboard(game *game.Game) {
 
 		if isFinished {
 			game.Stop()
+			os.Exit(0)
 			break
 		}
 	}

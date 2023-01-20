@@ -21,7 +21,7 @@ type Game struct {
 	currentIndex int
 	contextSlice []rune
 	time         int
-	Cps          float64
+	Cps          int
 	words        int
 }
 
@@ -75,7 +75,7 @@ func (g *Game) startTimer() {
 func (g *Game) updateTime() {
 	g.time += updateCycle
 
-	g.Cps = float64(g.currentIndex) / (float64(g.time) / float64(1000))
+	g.Cps = int(float64(g.currentIndex) / (float64(g.time) / float64(1000)))
 }
 
 func (game Game) IsCorrectLetter(letter rune) bool {
@@ -107,6 +107,7 @@ func (g *Game) colorizeContext() string {
 func (g *Game) Stop() {
 	close(quit)
 	writer.Stop()
+	SaveStats(GenerateStats(g))
 }
 
 func (g *Game) updateWordCount() {
