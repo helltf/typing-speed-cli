@@ -3,7 +3,6 @@ package game
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 
 	"github.com/helltf/typing-speed-cli/internal/util"
 )
@@ -40,16 +39,16 @@ func SaveStats(stats *Stats) error {
 	return ioutil.WriteFile("stats.json", file, 0644)
 }
 
-func ReadStats() *Stats {
+func ReadStats() (*Stats, error) {
 	path := "stats.json"
 
 	result, err := util.ReadJsonFile[Stats](path)
 
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return result
+	return result, nil
 }
 
 func getAverageStats(game *Game) StatsData {
