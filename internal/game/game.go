@@ -23,6 +23,7 @@ type Game struct {
 	time         int
 	Cps          int
 	words        int
+	correctInput bool
 }
 
 func NewGame(context string) *Game {
@@ -30,29 +31,29 @@ func NewGame(context string) *Game {
 		context:      context,
 		currentIndex: 0,
 		contextSlice: []rune(context),
-		words:        1}
+		words:        1,
+		correctInput: true}
 
-	writer.Print(game.getOutputContext(true))
+	writer.Print(game.getOutputContext())
 	go game.startTimer()
 	return game
 }
 
 func (game *Game) Input(input rune) bool {
-	correctLetter := game.IsCorrectLetter(input)
+	game.correctInput = game.IsCorrectLetter(input)
 
-	if correctLetter {
-		game.incrementIndex()
-
-		if input == 0 {
-			game.updateWordCount()
-		}
-	}
-
-	writer.Update(game.getOutputContext(correctLetter))
-
-	if !correctLetter {
+	if !game.correctInput {
+		writer.Update(game.getOutputContext())
 		return false
 	}
+
+	game.incrementIndex()
+
+	if input == 0 {
+		game.updateWordCount()
+	}
+
+	writer.Update(game.getOutputContext())
 
 	return game.currentIndex == len(game.context)
 }
@@ -96,12 +97,14 @@ func (game *Game) setIndex(index int) {
 	game.currentIndex = index
 }
 
-func (g *Game) colorizeContext(correct bool) string {
+func (g *Game) colorizeContext() string {
 	cursor := ""
+
 	if config.Conf.Cursor {
 		cursor = "|"
 	}
-	if !correct {
+
+	if !g.correctInput {
 		cursor = color.Red + cursor + color.Reset
 	}
 
@@ -153,8 +156,8 @@ func (g *Game) getCurrentSpeed() string {
 	return strconv.Itoa(g.getWpm()) + " Words per minute"
 }
 
-func (g *Game) getOutputContext(correct bool) string {
-	return strings.ReplaceAll(g.colorizeContext(correct), " ", config.Conf.Space) +
+func (g *Game) getOutputContext() string {
+	return strings.ReplaceAll(g.colorizeContext(), " ", config.Conf.Space) +
 		"\n\n" +
 		g.getCurrentSpeed() +
 		"\n" +
